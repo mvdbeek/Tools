@@ -4,7 +4,7 @@ import argparse
 import sys
 
 
-def get_dict(tabular_file_handle):  # In this function, the file te_name_file_handle is used
+def get_dict(tabular_file_handle):  # In this function, the file tab_file_handle is used
     """
     This function creates a dictionary out of the file provided containing TE ID names\
     and their common usage names separated by a tab
@@ -14,12 +14,12 @@ def get_dict(tabular_file_handle):  # In this function, the file te_name_file_ha
         line = line.strip()  # The leading and trailing white spaces are stripped
         key, value = line.split("\t")  # The line is then split where there is a tab and 
                                        # then the two results are defined as key and value
-        dictionary[key] = value  # The key(ID Name) is linked to the value(common use name)
+        dictionary[key] = value  # The key is linked to the value
     return dictionary  # Show dictionary on the screen
 
 
 def replace_id(line, dictionary):  
-# In this function, the dictionary and the lines of the te_name_file_handle are fed in.
+# In this function, the dictionary and the lines of the fasta_file_handle are fed in.
     """
     This function reads a fasta header (line), recovers the name of the sequence "(>fasta_1)"
     and stores this in key. We look up key in the dictionary, and if the key is present,
@@ -30,14 +30,14 @@ def replace_id(line, dictionary):
     if key in dictionary:  #If key is in the dictionary, it is replaced
         line = line.replace(key,dictionary[key])
         return line
-    print("Fasta header  %s is not present in multifastafile" % key)
+    print("Value  %s is not present in multifastafile" % key)
     return line
 
 
 description = ( "This script will exchange fasta headers in multifasta file with values linked in tabular file")
 
 parser = argparse.ArgumentParser(description)
-parser.add_argument("input1", help="A file containing two linked columns separated by a tab")
+parser.add_argument("input1", help="A tabular file containing two linked columns separated by a tab")
 parser.add_argument("input2", help="A multifasta file containing fasta headers and their sequences")
 parser.add_argument("output", help="Name of the output fasta file.")
 # uncomment the next line only when interactively testing!
