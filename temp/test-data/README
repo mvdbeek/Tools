@@ -1,0 +1,7 @@
+This is a small simulated dataset for testing if TEMP is properly installed and demonstrating how it works.
+
+10 TE insertions and 5 TE excisions were generated in the chr2L:2000000-3000000 region of the Drosophila Melanogaster Reference Genome (dm3), and pair-end Illumina reads were simulated with insert size 500, read length 90 and error-rate of 0.0005. Those reads were mapped to the dm3 reference genome and the alignments were in the file "test_chromosome.sorted.bam". 
+
+The 10 simulated insertions and 5 excisions were listed in the file "test_chromosome.sites". 
+The concensus sequences for those 10 TEs were in the file "test_concensus.fa".
+The annotated TE insertions in the reference genome were listed in the file "test_TE_annotation.bed".

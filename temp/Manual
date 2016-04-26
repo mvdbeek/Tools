@@ -1,0 +1,186 @@
+TEMP (Transposable Element Movement in Population) Manual
+
+
+2015.01.09
+
+
+TEMP is a software designed to 1) detect transposable elements (TEs) insertions and absences relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and absences. 
+This document provides information concerning how to run TEMP, what options to use, and how to interpret the outputs. If you have any questions or find any bugs please contact Jiali Zhuang through jiali.zhuang@umassmed.edu. 
+
+
+
+Requirement and installation
+
+
+TEMP runs on Linux x86_64 systems. 
+Following softwares are required by TEMP and should be included in the path:
+Samtools (http://samtools.sourceforge.net/),
+bedtools (http://code.google.com/p/bedtools/),
+bwa (http://sourceforge.net/projects/bio-bwa/),
+twoBitToFa (http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/twoBitToFa),
+Perl package BioPerl is also required for running TEMP (http://www.bioperl.org/wiki/Main_Page).
+
+For installing TEMP just unzip and untar the file. 
+In the directory TEMP_v1.01/ there are two bash scripts TEMP_Insertion.sh and TEMP_Absence.sh for TE insertion and absence analysis, respectively. 
+
+
+
+
+Options
+
+
+For TEMP_Insertion.sh the arguments to the options are explained below:
+
+
+       -i    Input file in bam format with full path. The users need to map the reads to the reference genome using mapping softwares such as BWA (http://bio-bwa.sourceforge.net/). Please sort and index the bam files before calling TEMP. Sorting and indexing can be done by 'samtools sort' and 'samtools index'.
+
+
+       -s    The full path to the scripts in directory TEMP_v1.0/.
+
+
+       -o    The full path to output directory. Default is current directory.
+
+
+       -r    Transposon consensus sequence fasta format with full path. Such files can be downloaded from Repbase (http://www.girinst.org/repbase/).
+
+
+       -t    Annotated transposon positions in the genome (e.g., RepeakMasker) in bed6 format with full path. 
+       
+       
+       -u    Families of transposable elements in tab delimited format (with the first column the name of the elemenet and the second column family). Only use together with -t. 
+
+
+       -x    The minimum score difference between the best hit and the second best hit for considering a read as uniquely mapped. The higher the score the more strigent the criterion. For BWA mem, which does not produce the XT:A: tag.
+       
+       
+       -m    Number of mismatches allowed when mapping to TE concensus sequences.
+
+
+       -f    An integer specifying the length of the fragments (inserts) of the library. Default is 500.
+
+
+       -c    An integer specifying the number of CUPs used. Default is 8.
+
+
+       -h    Show help message.
+
+
+
+
+For TEMP_Absence.sh the arguments to the options are explained below:
+
+
+       -i    Input file in bam format with full path. The users need to map the reads to the reference genome using mapping softwares such as BWA (http://bio-bwa.sourceforge.net/). Please sort and index the bam files before calling TEMP. Sorting and indexing can be done by 'samtools sort' and 'samtools index'.
+
+
+       -s    The full path to the scripts in directory TEMP_v1.0/.
+
+
+       -o    Path to output directory. Default is current directory.
+
+
+       -r    Annotated transposon positions in the genome (e.g., RepeakMasker) in bed6 format with full path. For major model organisms such file can be downloaded from UCSC Genome Browser. In Table Browser page just choose “variation and repeats” in the group tab and “RepeatMasker” in the track tab. 
+
+
+       -t    2bit file for the reference genome. Such file can be downloaded from UCSC Genome Browser. In Downloads page choose the right genome, click on the “Full data set” link and download the *.2bit file.  
+
+
+       -f    An integer specifying the length of the fragments (inserts) of the library. Default is 500.
+
+
+       -c    An integer specifying the number of CUPs used. Default is 4.
+
+
+       -h    Show help message.
+
+
+
+
+Output files
+
+
+For TE insertion analysis, the summay output file has the suffix: .insertion.refined.bp.summary.
+
+
+There are 14 columns in the summary file and their meanings are listed below:
+Column 1: The chromosome where the detected insertion happens.
+Column 2: The coordinate of the start position of the detected insertion.
+Column 3: The coordinate of the end position of the detected insertion.
+Column 4: The TE family that the detected insertion belongs to. 
+Column 5: The direction of the insertion. “Plus” means that the TE is integrated with the plus strand of the genome while “minus” means the TE is integrated with the minus strand.
+Column 6: The class of the insertion. “1p1” means that the detected insertion is supported by reads at both sides. “2p” means the detected insertion is supported by more than 1 read at only 1 side. “Singleton” means the detected insertion is supported by only 1 read at 1 side. 
+Column 7: The total number of read pairs that support the detected insertion. 
+Column 8: The estimated population frequency of the detected insertion.
+Columns 9 & 10: The coordinate of a junction and the number of the reads supporting it. If the junction is not found column 9 will be the arithmetic mean of the start and end coordinates and column 10 will have the value 0.
+Columns 11 & 12: Same as Columns 9 & 10 except for the junction on the other strand. 
+Column 13: The number of reads supporting the detected insertion at the 5’ end of the TE (not including junction spanning reads).
+Column 13: The number of reads supporting the detected insertion at the 3’ end of the TE (not including junction spanning reads).
+
+
+
+
+For TE absence analysis, the summay output file has the suffix: .absence.refined.bp.summary.
+
+
+There are 9 columns in the summary file and their meanings are listed below:
+Column 1: The chromosome where the detected absence happens.
+Column 2: The coordinate of the start position of the detected absence.
+Column 3: The coordinate of the end position of the detected absence.
+Column 4: The TE family that the detected insertion belongs to. 
+Column 5: Junctions at 5’ of the excised TE. The two numbers are the coordinates of the junctions on the two strands.
+Column 6: Junctions at 3’ of the excised TE. The two numbers are the coordinates of the junctions on the two strands. 
+Column 7: The number of reads supporting the absence.
+Column 8: The number of reads supporting the reference (no absence).
+Column 9: Estimated population frequency of the detected absence event.
+
+
+
+
+
+Visualization
+
+Since v1.01, we added a new function to TEMP that enables the visualization of the distribution of predicted TE insertion across the genome using Dr. Xiaopeng Zhu's visualization tool "circosjs".
+
+The procedure involves two steps:
+1) Generate the JSON objects file from the TEMP detected TE insertions. 
+This can be done easily by running the script "generate_density_json.pl": e.g.
+perl generate_density_json.pl input.insertion.bp.summary ref.chromInfo 500000
+
+This script takes 3 parameters: (1) the TE insertions predicted by TEMP (i.e., the output file produced by TEMP_Insertion.sh);
+                                (2) the file contains the sizes of all the chromosomes in a reference genome (the chromInfo files for model organism genomes can be downloaded from UCSC Genome Browser);
+                                (3) the size of genomic bins (500kb in the above example), total number predicted TE insertions in each will be calculated and plotted later.
+                                
+2) Visualization of the distribution of TE insertions across the genome.
+Dr. Xiaopeng Zhu (https://twitter.com/nimezhu) at UMass Medical School developed a powserful web-based visualization tool that is available at: http://circos.zhu.land/
+The user only needs to upload the JSON file generated in step1 in the "read local file" section. 
+
+Please forward any question and suggestion about the website to Dr. Zhu: xiaopeng.zhu@umassmed.edu
+
+
+
+
+
+
+Test datasets
+
+We put together two datasets for testing TEMP. 
+
+One is a simulated set generated using Drosophila Melanogaster Chromosome 2L as the template. It's distributed along with this package.
+
+The recommended commandline invokation for this testset is:
+git clone https://github.com/JialiUMassWengLab/TEMP.git
+cd TEMP
+tar -xvzf test_dataset.tar.gz
+cd test_dataset/
+bash ../scripts/TEMP_Insertion.sh -i ./test_chromosome.sorted.bam -s ../scripts -r ./test_concensus.fa -t ./test_TE_annotation.bed -m 3 -f 500 -c 8
+bash ../scripts/TEMP_Absence.sh -i ./test_chromosome.sorted.bam -s ../scripts -r ./test_TE_annotation.bed -t ./dm3_chr2L.2bit -f 500 -c 4
+
+The other one is derived from chromosome 11 of 8 individuals from 1000 gnomes project. It's available at http://zlab.umassmed.edu/~zhuangj/TEMP_resources/Human_test_dataset.tar.gz.
+The recommended commandline invokation for this testset is:
+git clone https://github.com/JialiUMassWengLab/TEMP.git
+cd TEMP
+wget http://bib.umassmed.edu/~zhuangj/TEMP_resources/Human_test_dataset.tar.gz
+tar -zxvf Human_test_dataset.tar.gz
+cd Human_test_dataset
+bash ../scripts/TEMP_Insertion.sh -i ./chrom11.test.sorted.bam -s ../scripts -r ./HomoSapienRepbaseTEConcensus.fa -t ./hg19_rpmk.bed -m 3 -f 500 -c 8
+bash ../scripts/TEMP_Absence.sh -i ./chrom11.test.sorted.bam -s ../scripts -r ./hg19_rpmk.bed -t ./hg19.2bit -f 500 -c 4

@@ -1,0 +1,10 @@
+# .shed.yml supporting automatic pushes.
+owner: portiahollyoak
+name: temp
+description: TEMP is a software package for detecting transposable elements (TEs) insertions and absences from pooled high-throughput sequencing data
+long_description: |
+  TEMP is a software package for detecting transposable elements (TEs) insertions and absences from pooled high-throughput sequencing data
+categories:
+  - Sequence Analysis
+homepage_url: http://artbio.fr
+remote_repository_url: https://github.com/portiahollyoak/Tools
