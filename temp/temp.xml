@@ -35,11 +35,11 @@
         <param format="txt" name="median_insertsize" type="data" label="Median Insert Length"/>
     </inputs>
     <outputs>
-        <data format="bed" type="data" name="insertion_bed" Label="Insertion BED file" />
-        <data format="bed" type="data" name="insertion_bed_refined" Label="Insertion BED file (refined)" />
-        <data format="bed" type="data" name="insertion_summary" Label="Insertion summary file" />
-        <data format="bed" type="data" name="absence_summary" Label="Absence summary file" />
-        <data format="zip" type="data" name="archive" Label="Compressed output files" />
+        <data format="bed" type="data" name="insertion_bed" label="Insertion BED file" />
+        <data format="bed" type="data" name="insertion_bed_refined" label="Insertion BED file (refined)" />
+        <data format="bed" type="data" name="insertion_summary" label="Insertion summary file" />
+        <data format="bed" type="data" name="absence_summary" label="Absence summary file" />
+        <data format="zip" type="data" name="archive" label="Compressed output files" />
     </outputs>
     <tests>
         <test>
