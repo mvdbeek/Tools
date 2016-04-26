@@ -1,0 +1,52 @@
+<tool id ="change_fasta_header_using_tabular_file" name="Change fasta header" version=" 0.1.0">
+    <description>using a tabular file</description>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command>python $__tool_directory__/change_fasta_header_using_tabular_file.py
+        --tab_input "$input1"
+        --fasta_input "$input2"
+        "$output"
+    </command>
+    <inputs>
+        <param format="tabular" name="input1" type="data" label="Tabular File"/>
+        <param format="fasta" name="input2" type="data" label="Fasta file"/>
+    </inputs>
+    <outputs>
+        <data format="fasta" name="output" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input1" value="tabular_file.tsv" ftype="tabular"/>
+            <param name="input2" value="genbank_input.fasta" ftype="fasta"/>
+            <output name="output" file="output.fasta"/>
+        </test>
+    </tests>
+    <help> <![CDATA[
+
+This tool takes 2 input files, a tabular file with text to replace in the first column,
+and a replacement text in the 2nd column, as well as a fasta file.
+Every occurence of values in the first column of the tabular file will be replaced with the
+value in the 2nd column.
+
+-----
+
+*Example*
+
+**Fasta header** ::
+
+    >RT1C
+    ATGCATGC
+
+**Tabular file** ::
+
+    RT1C    Rt1c
+
+**Output file** ::
+
+    >Rt1c
+    ATGCATGC
+
+
+    ]]> </help>
+</tool>
