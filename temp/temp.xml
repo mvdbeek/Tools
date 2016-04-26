@@ -1,0 +1,71 @@
+<tool id ="run_TEMP" name="Run TEMP" version=" 0.1.0">
+    <description></description>
+    <requirements>
+        <requirement type="package" version="0.1.19">samtools</requirement>
+        <requirement type="package" version="1.6.924">perl-bioperl</requirement>
+        <requirement type="package" version="0.7.13">bwa</requirement>
+        <requirement type="package" version="2.25.0">bedtools</requirement>
+        <requirement type="package" version="324">ucsc-twobittofa</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+
+        ln -f -s "$alignment.metadata.bam_index" "$alignment.element_identifier".sorted.bam.bai &&
+        ln -f -s "$alignment" "$alignment.element_identifier".sorted.bam &&
+        ls -l ;
+        bash $__tool_directory__/scripts/TEMP_Insertion.sh -i "$alignment.element_identifier".sorted.bam -s $__tool_directory__/scripts -r "$consensus_te_seqs" -t "$bed_te_locations" -m 3 -f "$median_insertsize" -c \${GALAXY_SLOTS:-2} && ls -l &&
+        bash $__tool_directory__/scripts/TEMP_Absence.sh -i "$alignment.element_identifier".sorted.bam -s $__tool_directory__/scripts -r "$bed_te_locations" -t "$reference2bit" -f 500 -c \${GALAXY_SLOTS:-2} &&
+        mv "$alignment.element_identifier".insertion.bp.bed $insertion_bed &&
+        mv "$alignment.element_identifier".insertion.refined.bp $insertion_bed_refined &&
+        mv "$alignment.element_identifier".insertion.refined.bp.summary $insertion_summary &&
+        mv "$alignment.element_identifier".absence.refined.bp.summary $absence_summary &&
+        zip archive.zip  *insertion* *excision* *absence* &&
+        mv archive.zip $archive
+    ]]></command>
+    <inputs>
+        <param format="bam" name="alignment" type="data" label="Alignment bam file"/>
+        <param format="twobit" name="reference2bit" type="data" label="Reference twobit file"/>
+        <param format="fasta" name="consensus_te_seqs" type="data" label="Consensus TE Seqs fasta file"/>
+        <param format="bed" name="bed_te_locations" type="data" label="TE Locations bed file"/>
+        <!--
+        <param format="tabular" name="te_families" type="data" label="TE Families"/>
+        <param format="gff" name="gff_te_locations" type="data" label="Reference TE insertion Locations with Family ID names GFF file"/>
+        -->
+        <param format="txt" name="median_insertsize" type="data" label="Median Insert Length"/>
+    </inputs>
+    <outputs>
+        <data format="bed" type="data" name="insertion_bed" Label="Insertion BED file" />
+        <data format="bed" type="data" name="insertion_bed_refined" Label="Insertion BED file (refined)" />
+        <data format="bed" type="data" name="insertion_summary" Label="Insertion summary file" />
+        <data format="bed" type="data" name="absence_summary" Label="Absence summary file" />
+        <data format="zip" type="data" name="archive" Label="Compressed output files" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="alignment" value="test_chromosome.sorted.bam" ftype="bam"/>
+            <param name="reference2bit" value="dm3_chr2L.2bit" ftype="twobit"/>
+            <param name="consensus_te_seqs" value="test_consensus.fa" ftype="fasta"/>
+            <param name="bed_te_locations" value="test_TE_annotation.bed" ftype="bed"/>
+            <output name="insertion_bed" file="test_chromosome.insertion.bp.bed" ftype="bed" />
+            <output name="insertion_bed_refined" file="test_chromosome.insertion.refined.bp" ftype="bed"/>
+            <output name="insertion_summary" file="test_chromosome.insertion.refined.bp.summary" ftype="bed"/>
+            <output name="absence_summary" file="test_chromosome.absence.refined.bp.summary" ftype="bed"/>
+        </test>
+    </tests>
+    <help> <![CDATA[
+
+
+TEMP is a software package for detecting transposable elements (TEs)  insertions and absences from pooled high-throughput sequencing data
+
+Current version v1.04
+
+Author: Jiali Zhuang (jiali.zhuang@umassmed.edu) and Jie Wang (jie.wangj@umassmed.edu) Weng Lab, University of Massachusetts Medical School, Worcester, MA, USA
+
+For TE insertion analysis run TEMP_Insertion.sh in script.
+For TE absence analysis run TEMP_Absence.sh in script.
+
+
+    ]]> </help>
+</tool>
