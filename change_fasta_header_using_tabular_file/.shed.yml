@@ -1,0 +1,15 @@
+# .shed.yml supporting automatic pushes.
+owner: portiahollyoak
+name: change_fasta_header_using_tabular_file
+description: Change fasta header using a tabular file
+long_description: |
+  This tool takes 2 input files, a tabular file with text to replace in the first column,
+  and a replacement text in the 2nd column, as well as a fasta file.
+  Every occurence of values in the first column of the tabular file will be replaced with the
+  value in the 2nd column
+categories:
+  - Fasta Manipulation
+  - Text Manipulation
+  - Sequence Analysis
+homepage_url: http://artbio.fr
+remote_repository_url: https://github.com/portiahollyoak/Tools
