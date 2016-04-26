@@ -1,0 +1,58 @@
+<tool id ="genbank_to_fasta" name="Convert multigenbank to multifasta" version=" 0.1.0">
+    <description></description>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command>python $__tool_directory__/genbank_to_fasta.py "$input" "$output"</command>
+    <inputs>
+        <param format="txt" name="input" type="data" label="Multigenbank file"/>
+    </inputs>
+    <outputs>
+        <data format="fasta" name="output" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input" value="genbank_input.txt"/>
+            <output name="output" file="output.fasta"/>
+        </test>
+    </tests>
+    <help>
+
+This tool converts a multigenbank file into a multifasta file.
+
+-----
+
+**Example multi genbank file** ::
+
+    ID   DME9736    standard; DNA; INV; 7411 BP.
+    XX
+    CC   Derived from AJ009736 (e1371475) (Rel. 58, Last updated, Version 1).
+    CC   Takis Benos and Michael Ashburner, 1-Feb-1999.
+    CC   Any changes to original sequence record are annotated in an FT line.
+    XX
+    SQ   Sequence 7411 BP; 3047 A; 1363 C; 1109 G; 1892 T; 0 other;
+         GTGACATATC CATAAGTCCC TAAGACTTAA GCATATGCCT ACATACTAAT ACACTTACAA        60
+         CACATACACC CCAATACAAC ATACACTACT CCGGATGTAC CCAACAGATA CCAGATAAGA       120
+         ATAAGATTGT TATATGATCC TCGAGAATGG AAAAAACCCC AATTCTAGAT AAGTCACCCA       180
+         CTGGTAGACT AAACATCCGT CCCCTAATTT AAACAATTCC TTGCTTAAGC CTCACCCCAT       240
+    //
+    ID   DMIS176    standard; DNA; INV; 7439 BP.
+    XX
+    CC   Derived from X01472 (g8142) (Rel. 36, Last updated, Version 2).
+    CC   Takis Benos and Michael Ashburner, 20-Aug-1997.
+    CC   Any changes to original sequence record are annotated in an FT line.
+    XX
+    SQ   Sequence 7439 BP;  2985 A; 1512 C; 1048 G; 1894 T; 0 other;
+         AGTGACATAT TCACATACAA AACCACATAA CATAGAGTAA ACATATTGAA AAGCCGCATA        60
+         CGTAAACAAT AAGTGACCAC CATGCTAATG TGGATCAAAT AACAAAAATA TCCACTCTGC       120
+    //
+
+**Example output fasta file** ::
+
+   >DME9736
+   GTGACATATCCATAAGTCCCTAAGACTTAAGCATATGCCTACATACTAATACACTTACAA....
+   >DMIS176
+   AGTGACATATTCACATACAAAACCACATAACATAGAGTAAACATATTGAAAAGCCGCATA
+
+    </help>
+</tool>

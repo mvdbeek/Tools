@@ -1,0 +1,12 @@
+# .shed.yml supporting automatic pushes.
+owner: portiahollyoak
+name: genbank_to_fasta
+description: This tool converts a multigenbank file into a multifasta file
+long_description: |
+  This tool converts a multigenbank file into a multifasta file
+categories:
+  - Fasta Manipulation
+  - Text Manipulation
+  - Sequence Analysis
+homepage_url: http://artbio.fr
+remote_repository_url: https://github.com/portiahollyoak/Tools
