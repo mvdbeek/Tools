@@ -1,11 +1,17 @@
 <tool id ="run_TEMP" name="Run TEMP" version=" 0.1.1">
     <description></description>
     <requirements>
-        <requirement type="package" version="0.1.19">samtools</requirement>
+        <!-- The following are classical toolshed packages and should be removed
+        once conda is deemed stable-->
+        <requirement type="package" version="1.6.922">bioperl</requirement>
+        <requirement type="package" version="0.7.12">bwa</requirement>
+        <requirement type="package" version="2.24">bedtools</requirement>
+        <!-- end of toolshed package definitions -->
         <requirement type="package" version="1.6.924">perl-bioperl</requirement>
         <requirement type="package" version="0.7.13">bwa</requirement>
         <requirement type="package" version="2.25.0">bedtools</requirement>
         <requirement type="package" version="324">ucsc-twobittofa</requirement>
+        <requirement type="package" version="0.1.19">samtools</requirement>
     </requirements>
     <stdio>
         <exit_code range="1:" />
