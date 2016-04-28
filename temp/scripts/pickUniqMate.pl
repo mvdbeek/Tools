@@ -46,7 +46,7 @@ while(<in>)
 		my $strand="+";
         	if($f[1]=~/r/)
         	{
-                	my $seq=Bio::Seq->new(-seq=>$f[9]);
+                	my $seq=Bio::Seq->new(-seq=>$f[9], -alphabet => 'dna');
                 	$f[9]=$seq->revcom->seq;
                 	$strand="-";
         	}
