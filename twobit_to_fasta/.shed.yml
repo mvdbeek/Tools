@@ -1,10 +1,10 @@
 # .shed.yml supporting automatic pushes.
 owner: portiahollyoak
-name: 2_bit_to_fasta
-description: Convert file from 2bit to fasta format
+name: twobit_to_fasta
+description: Convert file from twobit to fasta format
 long_description: |
-  This tool converts a 2bit formatted file and converts it to fasta format.
+  This tool converts a twobit formatted file and converts it to fasta format.
 categories:
-  - Fasta Manipulation
+  - Convert Formats
 homepage_url: http://artbio.fr
 remote_repository_url: https://github.com/portiahollyoak/Tools
