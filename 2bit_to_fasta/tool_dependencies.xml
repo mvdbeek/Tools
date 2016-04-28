@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="twoBitToFa" version="latest  ">
+        <repository name="ppackage_twobittofa" owner="geert-vandeweyer"/>
+    </package>
+</tool_dependency>
