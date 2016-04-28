@@ -3,7 +3,7 @@ owner: portiahollyoak
 name: 2_bit_to_fasta
 description: Convert file from 2bit to fasta format
 long_description: |
-This tool converts a 2bit formatted file and converts it to fasta format.
+  This tool converts a 2bit formatted file and converts it to fasta format.
 categories:
   - Fasta Manipulation
 homepage_url: http://artbio.fr
