@@ -167,8 +167,12 @@ perl $BINDIR/refine_breakpoint.in.pl
 
 
 #Estimate insertion frequencies
-perl $BINDIR/pickOverlapPair.in.pl $i.insertion.refined.bp $INSERT > $i.insertion.refined.bp.summary
-
+if [[ $SCORE -eq 0 ]]
+then
+    perl $BINDIR/pickOverlapPair.in.pl $i.insertion.refined.bp $INSERT > $i.insertion.refined.bp.summary
+else
+    perl $BINDIR/pickOverlapPair.ex_MEM.pl $i.insertion.refined.bp $INSERT $SCORE > $i.insertion.refined.bp.summary    
+fi
 
 ################################
 ##End of processing insertions##
