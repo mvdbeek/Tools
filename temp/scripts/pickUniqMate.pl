@@ -19,7 +19,7 @@ my (%te,@ref,%ref);
 while(<in>)
 {
 	chomp;
-	my @f=split/\t/,$_,12;
+	my @f=split/\s+/,$_;
 	# headers
 	if(/^\@SQ/)
 	{
@@ -32,50 +32,62 @@ while(<in>)
 	# unmapped
 	next if $f[2] eq "*";
 	
-	# alignments
-	if($f[11]=~/XT:A:/)
+	my $mm=200;
+	my $xa="";
+	for my $q (11..$#f)
 	{
-		my ($rnum)=$f[1]=~/(\d)$/;
-		# CIGAR
-		my (@cigar_m)=$f[5]=~/(\d+)M/g;
-		my (@cigar_d)=$f[5]=~/(\d+)D/g;
-		my (@cigar_s)=$f[5]=~/(\d+)S/g;
-		my (@cigar_i)=$f[5]=~/(\d+)I/g;
-		my $aln_ln=sum(@cigar_m,@cigar_d);
-		
-		my $strand="+";
-        	if($f[1]=~/r/)
-        	{
-                	my $seq=Bio::Seq->new(-seq=>$f[9], -alphabet => 'dna');
-                	$f[9]=$seq->revcom->seq;
-                	$strand="-";
-        	}
+	    if($f[$q]=~/NM:/)
+	    {
+		$mm=$f[$q];
+		$mm =~ s/NM://;
+	    }
 
-		# align to the junctions
-		if(($f[3]+$aln_ln-1)>${$ref[$ref{$f[2]}]}[1])
-		{
-			if(($f[3]+($aln_ln-1)/2)>${$ref[$ref{$f[2]}]}[1])
-			{
-				$f[2]=${$ref[$ref{$f[2]}+1]}[0];
-				$f[3]=1;
-				$aln_ln=$aln_ln-(${$ref[$ref{$f[2]}]}[1]-$f[3]+1);
-			}
-			else
-			{
-				$aln_ln=${$ref[$ref{$f[2]}]}[1]-$f[3]+1;
-			}
-		}
-
-		$pe{$f[0]}{$rnum}=$f[2].",".$strand."$f[3]".";";
-
-		# XA tag
-		if($f[11]=~/XA:Z:/)
-		{
-			my ($xa)=$f[11]=~/XA:Z:(.*);$/; 
-			my @xa=split(";",$xa);
-			$pe{$f[0]}{$rnum}.=join(",",(split/,/)[0,1]).";" foreach @xa;
-		}
+	    if($f[$q]=~/XA:Z:/)
+	    {
+		($xa)=$f[$q]=~/XA:Z:(.*);$/;
+		last;
+	    }
 	}
+
+	if ($mm > 5) {next;}
+
+	my ($rnum)=$f[1]=~/(\d)$/;
+	# CIGAR
+	my (@cigar_m)=$f[5]=~/(\d+)M/g;
+	my (@cigar_d)=$f[5]=~/(\d+)D/g;
+	my (@cigar_s)=$f[5]=~/(\d+)S/g;
+	my (@cigar_i)=$f[5]=~/(\d+)I/g;
+	my $aln_ln=sum(@cigar_m,@cigar_d);
+	
+	my $strand="+";
+	if($f[1]=~/r/)
+	{
+	    my $seq=Bio::Seq->new(-seq=>$f[9]);
+	    $f[9]=$seq->revcom->seq;
+	    $strand="-";
+	}
+	
+	# align to the junctions
+	if(($f[3]+$aln_ln-1)>${$ref[$ref{$f[2]}]}[1])
+	{
+	    if(($f[3]+($aln_ln-1)/2)>${$ref[$ref{$f[2]}]}[1])
+	    {
+		$f[2]=${$ref[$ref{$f[2]}+1]}[0];
+		$f[3]=1;
+		$aln_ln=$aln_ln-(${$ref[$ref{$f[2]}]}[1]-$f[3]+1);
+	    }
+	    else
+	    {
+		$aln_ln=${$ref[$ref{$f[2]}]}[1]-$f[3]+1;
+	    }
+	}
+	
+	$pe{$f[0]}{$rnum}=$f[2].",".$strand."$f[3]".";";
+	    
+	# XA tag
+	my @xa=split(";",$xa);
+	$pe{$f[0]}{$rnum}.=join(",",(split/,/)[0,1]).";" foreach @xa;
+
 }
 close in;
 
