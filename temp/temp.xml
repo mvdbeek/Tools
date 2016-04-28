@@ -20,7 +20,7 @@
 
         ln -f -s "$alignment.metadata.bam_index" alignment.sorted.bam.bai &&
         ln -f -s "$alignment" alignment.sorted.bam &&
-        bash $__tool_directory__/scripts/TEMP_Insertion.sh -i alignment.sorted.bam -s $__tool_directory__/scripts -r "$consensus_te_seqs" -t "$bed_te_locations" -m 3 -f "$median_insertsize" -c \${GALAXY_SLOTS:-2} &&
+        bash $__tool_directory__/scripts/TEMP_Insertion.sh -x 30 -i alignment.sorted.bam -s $__tool_directory__/scripts -r "$consensus_te_seqs" -t "$bed_te_locations" -m 3 -f "$median_insertsize" -c \${GALAXY_SLOTS:-2} &&
         bash $__tool_directory__/scripts/TEMP_Absence.sh -i alignment.sorted.bam -s $__tool_directory__/scripts -r "$bed_te_locations" -t "$reference2bit" -f 500 -c \${GALAXY_SLOTS:-2} &&
         mv alignment.insertion.bp.bed $insertion_bed &&
         mv alignment.insertion.refined.bp $insertion_bed_refined &&
