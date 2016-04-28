@@ -1,0 +1,10 @@
+# .shed.yml supporting automatic pushes.
+owner: portiahollyoak
+name: 
+description: 
+long_description: |
+
+categories:
+  - Fasta Manipulation
+homepage_url: http://artbio.fr
+remote_repository_url: https://github.com/portiahollyoak/Tools

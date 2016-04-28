@@ -1,0 +1,27 @@
+<tool id ="2bit_to_fasta" name="Convert 2bit to fasta format" version=" 0.1.0">
+    <description></description>
+    <requirements>
+        <requirement type="package" version="latest">twoBitToFa</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command>twoBitToFa "$input1" "$output" </command>
+    <inputs>
+        <param format="twobit" name="input1" type="data" label="twobit File"/>
+    </inputs>
+    <outputs>
+        <data format="fasta" name="output" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input1" value="dm3_chr2L.2bit" ftype="twobit"/>
+            <output name="output" file="output.fasta"/>
+        </test>
+    </tests>
+    <help> <![CDATA[
+
+This tool takes an input 2bit file and converts it into fasta format.
+
+    ]]> </help>
+</tool>
