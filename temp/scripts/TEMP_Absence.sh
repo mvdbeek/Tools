@@ -26,7 +26,8 @@ Options:
         -r     Annotated transposon positions in the genome (e.g., repeakMask) in bed6 format with full path
         -t     2bit file for the reference genome (can be downloaded from UCSC Genome Browser)
         -f     An integer specifying the length of the fragments (inserts) of the library. Default is 500
-        -c     An integer specifying the number of CUPs used. Default is 4
+        -x     The minimum score difference between the best hit and the second best hit for considering a read as uniquely mapped. For BWA MEM.
+        -c     An integer specifying the number of CPUs used. Default is 4
         -h     Show help message
 
 EOF
@@ -34,7 +35,7 @@ echo -en "\e[0m"
 }
 
 # taking options
-while getopts "hi:c:f:o:r:s:t:" OPTION
+while getopts "hi:c:f:o:r:s:t:x:" OPTION
 do
         case $OPTION in
                 h)
@@ -61,6 +62,9 @@ do
 	        t)
 		        REF=$OPTARG
 		;;
+	        x)
+		        SCORE=$OPTARG
+		;;
                 ?)
                         usage && exit 1
                 ;;
@@ -73,6 +77,7 @@ then
 fi
 [ ! -z "${CPU##*[!0-9]*}" ] || CPU=4
 [ ! -z "${INSERT##*[!0-9]*}" ] || INSERT=500
+[ ! -z "${SCORE##*[!0-9]*}" ] || SCORE=0
 [ ! -z $OUTDIR ]  || OUTDIR=$PWD
 
 mkdir -p "${OUTDIR}" || echo -e "\e[1;31mWarning: Cannot create directory ${OUTDIR}. Using the direcory of input fastq file\e[0m"
@@ -93,6 +98,7 @@ checkExist "sort"
 checkExist "touch"
 checkExist "awk"
 checkExist "grep"
+checkExist "twoBitToFa"
 checkExist "bwa"
 checkExist "samtools"
 echo -e "\e[1;35mDone with testing required softwares/scripts, starting pipeline...\e[0m"
@@ -134,5 +140,11 @@ perl $BINDIR/pickSoftClipping.over.pl $i.excision.cluster.rpmk $REF > $i.excisio
 perl $BINDIR/refine_breakpoint.ex.pl
 
 # Estimate excision sites frequencies
-perl $BINDIR/pickOverlapPair.ex.pl $i.excision.cluster.rpmk.refined.bp > $i.excision.cluster.rpmk.refined.bp.refsup
+if [[ $SCORE -eq 0 ]]
+then
+    perl $BINDIR/pickOverlapPair.ex.pl $i.excision.cluster.rpmk.refined.bp > $i.excision.cluster.rpmk.refined.bp.refsup
+else
+    perl $BINDIR/pickOverlapPair.ex_MEM.pl $i.excision.cluster.rpmk.refined.bp $SCORE > $i.excision.cluster.rpmk.refined.bp.refsup
+fi
+
 perl $BINDIR/summarize_excision.pl

@@ -29,7 +29,7 @@ Options:
         -m     Number of mismatch allowed when mapping to TE concensus sequences. Default is 3
         -x     The minimum score difference between the best hit and the second best hit for considering a read as uniquely mapped. For BWA mem. 
         -f     An integer specifying the length of the fragments (inserts) of the library. Default is 500
-        -c     An integer specifying the number of CUPs used. Default is 8
+        -c     An integer specifying the number of CPUs used. Default is 8
         -h     Show help message
 
 EOF
@@ -157,7 +157,7 @@ rm tmp
 perl $BINDIR/get_class.pl $i.uniq.transposons.filtered.wGap.bed $i > $i.uniq.transposons.filtered.wGap.class.bed
 perl $BINDIR/make.bp.bed.pl $i.uniq.transposons.filtered.wGap.class.bed $ANNO $FAMI
 
-#rm $i.unpair.sam $i.unpair.uniq.bed $i.unpair.uniq.?.fastq $i.unpair.uniq.?.sai 
+rm $i.unpair.sam $i.unpair.uniq.bed $i.unpair.uniq.?.fastq $i.unpair.uniq.?.sai 
 rm $i.unpair.uniq.transposons.sam $i.unpair.uniq.transposons.unpair.sam $i.uniq.transposons.filtered.woGap.bed $i.uniq.transposons.filtered.wGap.bed
 
 
@@ -167,8 +167,12 @@ perl $BINDIR/refine_breakpoint.in.pl
 
 
 #Estimate insertion frequencies
+#if [[ $SCORE -eq 0 ]]
+#then
 perl $BINDIR/pickOverlapPair.in.pl $i.insertion.refined.bp $INSERT > $i.insertion.refined.bp.summary
-
+#else
+#    perl $BINDIR/pickOverlapPair.ex_MEM.pl $i.insertion.refined.bp $INSERT $SCORE > $i.insertion.refined.bp.summary    
+#fi
 
 ################################
 ##End of processing insertions##
