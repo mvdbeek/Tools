@@ -1,4 +1,4 @@
-<tool id ="run_TEMP" name="Run TEMP" version=" 0.1.2">
+<tool id ="run_TEMP" name="Run TEMP" version=" 0.1.3">
     <description></description>
     <requirements>
         <!-- The following are classical toolshed packages and should be removed
@@ -17,32 +17,24 @@
         <exit_code range="1:" />
     </stdio>
     <command><![CDATA[
-
         ln -f -s "$alignment.metadata.bam_index" alignment.sorted.bam.bai &&
         ln -f -s "$alignment" alignment.sorted.bam &&
-        bash $__tool_directory__/scripts/TEMP_Insertion.sh -x 30 -i alignment.sorted.bam -s $__tool_directory__/scripts -r "$consensus_te_seqs" -t "$bed_te_locations" -m 3 -f "$median_insertsize" -c \${GALAXY_SLOTS:-2} &&
+        bash $__tool_directory__/scripts/TEMP_Insertion.sh -x "$minimum_score_difference" -i alignment.sorted.bam -s $__tool_directory__/scripts -r "$consensus_te_seqs" -t "$bed_te_locations" -m "$mismatches" -f "$median_insertsize" -c \${GALAXY_SLOTS:-2} &&
         bash $__tool_directory__/scripts/TEMP_Absence.sh -i alignment.sorted.bam -s $__tool_directory__/scripts -r "$bed_te_locations" -t "$reference2bit" -f 500 -c \${GALAXY_SLOTS:-2} &&
-        mv alignment.insertion.bp.bed $insertion_bed &&
-        mv alignment.insertion.refined.bp $insertion_bed_refined &&
+        zip archive.zip  *insertion* *excision* *absence* && mv archive.zip $archive &&
         mv alignment.insertion.refined.bp.summary $insertion_summary &&
-        mv alignment.absence.refined.bp.summary $absence_summary &&
-        zip archive.zip  *insertion* *excision* *absence* &&
-        mv archive.zip $archive
+        mv alignment.absence.refined.bp.summary $absence_summary
     ]]></command>
     <inputs>
         <param format="bam" name="alignment" type="data" label="Alignment bam file"/>
         <param format="twobit" name="reference2bit" type="data" label="Reference twobit file"/>
         <param format="fasta" name="consensus_te_seqs" type="data" label="Consensus TE Seqs fasta file"/>
         <param format="bed" name="bed_te_locations" type="data" label="TE Locations bed file"/>
-        <!--
-        <param format="tabular" name="te_families" type="data" label="TE Families"/>
-        <param format="gff" name="gff_te_locations" type="data" label="Reference TE insertion Locations with Family ID names GFF file"/>
-        -->
         <param format="txt" name="median_insertsize" type="data" label="Median Insert Length"/>
+        <param name="mismatches" min="0" max="5" type="integer" value="3" label="Allow this many mismatches when aligning to TEs"/>
+        <param name="minimum_score_difference" type="integer" min="10" max="37" value="30" label="Minimum score difference between optimal and suboptimal alignment to consider read uniquely mapped"></param>
     </inputs>
     <outputs>
-        <data format="bed" type="data" name="insertion_bed" label="Insertion BED file" />
-        <data format="bed" type="data" name="insertion_bed_refined" label="Insertion BED file (refined)" />
         <data format="bed" type="data" name="insertion_summary" label="Insertion summary file" />
         <data format="bed" type="data" name="absence_summary" label="Absence summary file" />
         <data format="zip" type="data" name="archive" label="Compressed output files" />
@@ -53,8 +45,6 @@
             <param name="reference2bit" value="dm3_chr2L.2bit" ftype="twobit"/>
             <param name="consensus_te_seqs" value="test_consensus.fa" ftype="fasta"/>
             <param name="bed_te_locations" value="test_TE_annotation.bed" ftype="bed"/>
-            <output name="insertion_bed" file="test_chromosome.insertion.bp.bed" ftype="bed" />
-            <output name="insertion_bed_refined" file="test_chromosome.insertion.refined.bp" ftype="bed"/>
             <output name="insertion_summary" file="test_chromosome.insertion.refined.bp.summary" ftype="bed"/>
             <output name="absence_summary" file="test_chromosome.absence.refined.bp.summary" ftype="bed"/>
         </test>
@@ -71,6 +61,41 @@ Author: Jiali Zhuang (jiali.zhuang@umassmed.edu) and Jie Wang (jie.wangj@umassme
 For TE insertion analysis run TEMP_Insertion.sh in script.
 For TE absence analysis run TEMP_Absence.sh in script.
 
+Output files
+-------------
+
+
+For TE insertion analysis there are 14 columns in the summary file::
+
+    Column 1: The chromosome where the detected insertion happens.
+    Column 2: The coordinate of the start position of the detected insertion.
+    Column 3: The coordinate of the end position of the detected insertion.
+    Column 4: The TE family that the detected insertion belongs to.
+    Column 5: The direction of the insertion. “Plus” means that the TE is integrated with the plus strand of the genome while “minus” means the TE is integrated with the minus strand.
+    Column 6: The class of the insertion. “1p1” means that the detected insertion is supported by reads at both sides. “2p” means the detected insertion is supported by more than 1 read at only 1 side. “Singleton” means the detected insertion is supported by only 1 read at 1 side.
+    Column 7: The total number of read pairs that support the detected insertion.
+    Column 8: The estimated population frequency of the detected insertion.
+    Columns 9 & 10: The coordinate of a junction and the number of the reads supporting it. If the junction is not found column 9 will be the arithmetic mean of the start and end coordinates and column 10 will have the value 0.
+    Columns 11 & 12: Same as Columns 9 & 10 except for the junction on the other strand.
+    Column 13: The number of reads supporting the detected insertion at the 5’ end of the TE (not including junction spanning reads).
+    Column 13: The number of reads supporting the detected insertion at the 3’ end of the TE (not including junction spanning reads).
+
+
+For TE absence analysis there are 9 columns in the summary file::
+
+    Column 1: The chromosome where the detected absence happens.
+    Column 2: The coordinate of the start position of the detected absence.
+    Column 3: The coordinate of the end position of the detected absence.
+    Column 4: The TE family that the detected insertion belongs to.
+    Column 5: Junctions at 5’ of the excised TE. The two numbers are the coordinates of the junctions on the two strands.
+    Column 6: Junctions at 3’ of the excised TE. The two numbers are the coordinates of the junctions on the two strands.
+    Column 7: The number of reads supporting the absence.
+    Column 8: The number of reads supporting the reference (no absence).
+    Column 9: Estimated population frequency of the detected absence event.
+
 
     ]]> </help>
+    <citations>
+        <citation type="doi">10.1093/nar/gku323</citation>
+    </citations>
 </tool>
