@@ -19,8 +19,8 @@
     <command><![CDATA[
         ln -f -s "$alignment.metadata.bam_index" alignment.sorted.bam.bai &&
         ln -f -s "$alignment" alignment.sorted.bam &&
-        bash $__tool_directory__/scripts/TEMP_Insertion.sh -x "$minimum_score_difference" -i alignment.sorted.bam -s $__tool_directory__/scripts -r "$consensus_te_seqs" -t "$bed_te_locations" -m "$mismatches" -f "$median_insertsize" -c \${GALAXY_SLOTS:-2} &&
-        bash $__tool_directory__/scripts/TEMP_Absence.sh -i alignment.sorted.bam -s $__tool_directory__/scripts -r "$bed_te_locations" -t "$reference2bit" -f 500 -c \${GALAXY_SLOTS:-2} &&
+        bash $__tool_directory__/scripts/TEMP_Insertion.sh -x "$minimum_score_difference" -i alignment.sorted.bam -s $__tool_directory__/scripts -r "$consensus_te_seqs" -t "$te_locations" -m "$mismatches" -f "$median_insertsize" -c \${GALAXY_SLOTS:-2} &&
+        bash $__tool_directory__/scripts/TEMP_Absence.sh -x "$minimum_score_difference" -i alignment.sorted.bam -s $__tool_directory__/scripts -r "$te_locations" -t "$reference2bit" -f 500 -c \${GALAXY_SLOTS:-2} &&
         zip archive.zip  *insertion* *excision* *absence* && mv archive.zip $archive &&
         mv alignment.insertion.refined.bp.summary $insertion_summary &&
         mv alignment.absence.refined.bp.summary $absence_summary
@@ -29,7 +29,7 @@
         <param format="bam" name="alignment" type="data" label="Alignment bam file"/>
         <param format="twobit" name="reference2bit" type="data" label="Reference twobit file"/>
         <param format="fasta" name="consensus_te_seqs" type="data" label="Consensus TE Seqs fasta file"/>
-        <param format="bed" name="bed_te_locations" type="data" label="TE Locations bed file"/>
+        <param format="bed" name="te_locations" type="data" label="TE Locations bed file"/>
         <param format="txt" name="median_insertsize" type="data" label="Median Insert Length"/>
         <param name="mismatches" min="0" max="5" type="integer" value="3" label="Allow this many mismatches when aligning to TEs"/>
         <param name="minimum_score_difference" type="integer" min="10" max="37" value="30" label="Minimum score difference between optimal and suboptimal alignment to consider read uniquely mapped"></param>
@@ -41,10 +41,11 @@
     </outputs>
     <tests>
         <test>
-            <param name="alignment" value="test_chromosome.sorted.bam" ftype="bam"/>
-            <param name="reference2bit" value="dm3_chr2L.2bit" ftype="twobit"/>
+            <param name="alignment" value="chr2l_bwa_mem.bam" ftype="bam"/>
+            <param name="reference2bit" value="dm6_chr2l.twobit" ftype="twobit"/>
             <param name="consensus_te_seqs" value="test_consensus.fa" ftype="fasta"/>
-            <param name="bed_te_locations" value="test_TE_annotation.bed" ftype="bed"/>
+            <param name="te_locations" value="test_TE_annotation.gff3" ftype="bed"/>
+            <param name="median_insertsize" value="median_insert_size" ftype="txt"/>
             <output name="insertion_summary" file="test_chromosome.insertion.refined.bp.summary" ftype="bed"/>
             <output name="absence_summary" file="test_chromosome.absence.refined.bp.summary" ftype="bed"/>
         </test>
