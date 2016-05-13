@@ -1,7 +1,7 @@
 # .shed.yml supporting automatic pushes.
 owner: portiahollyoak
 name: breakdancer
-description: 
+description: Breakdancer provides genome-wide detection of structural variation.
 long_description: |
   BreakDancer (previously BreakDancerMax) provides genome-wide detection of five types of structural variants: insertions, deletions, inversions, inter- and intra-chromosomal translocations from next-generation short paired-end sequencing reads using read pairs that are mapped with unexpected separation distances or orientation.
 
