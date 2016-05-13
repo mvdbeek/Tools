@@ -1,0 +1,177 @@
+<tool id="breakdancer_max" name="BreakdancerMax" version="1.3.6">
+    <description></description>
+    <requirements>
+        <requirement type="package" version="0.1.19">samtools</requirement>
+        <requirement type="package" version="1.4.5">breakdancer</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+        ln -f -s "$input_file.metadata.bam_index" alignment.bam.bai &&
+        ln -f -s "$input_file" alignment.bam &&
+        python $__tool_directory__/create_config_file.py
+        --input_file alignment.bam
+        --mean "$mean"
+        --std_dev "$std_dev"
+        --read_length "$read_length"
+        --sample_name "$sample_name"
+        --output_config_file output_config_file &&
+        cat output_config_file &&
+        breakdancer-max
+        -s "$min_length"
+        -c "$cutoff"
+        -m "$maximum_sv"
+        -q "$quality"
+        -r "$min_rp"
+        -x "$hap_seq_threshold"
+        -b "$buffer_size"
+        $transchr_rearr
+        -d "$sample_name"
+        -g "$sample_name"
+        $illumina_long
+        $copy_number_bam
+        $allele_freq
+        -y "$output_score_filter"
+         output_config_file &&
+        mv "$sample_name" "$results_bed"
+    ]]></command>
+    <inputs>
+        <param name="input_file" type="data" format="bam" label="One or more alignment files"/>
+        <param name="mean" type="integer" value="" label="Mean Insert Size"/>
+        <param name="std_dev" type="integer" value="" label="The standard deviation of insert size"/>
+        <param name="read_length" type="integer" value="" label="Average read length"/>
+        <param name="sample_name" type="text" label="Sample name"/>
+        <param name="min_length" type="integer" value="7"
+               label="Minimal required size of a SV anchoring region from which the anomalously mapped reads are found"/>
+        <param name="cutoff" type="integer" value="3"  label="Cutoff in unit of standard deviation"/>
+        <param name="maximum_sv" type="integer" value="1000000000" label="Maximum SV Size"/>
+        <param name="quality" type="integer" value="35" label="Minimum MAQ mapping quality threshold"/>
+        <param name="min_rp" type="integer" value="2"
+               label="Minimum number of read pairs required to establish a connection"/>
+        <param name="hap_seq_threshold" type="integer" value="1000"
+               label="Maximum threshold of haploid sequence coverage for regions to be ignored"/>
+        <param name="buffer_size" type="integer" value="100"
+               label="Buffer size for building connection"/>
+        <param name="transchr_rearr" type="boolean" checked="false" truevalue="-t" falsevalue=""
+               label="Only detect transchromosomal rearrangement (Default = No)"/>
+        <param name="illumina_long" type="boolean" checked="false" truevalue="-l" falsevalue=""
+               label="Analyze Illumina long insert (mate-pair) library"/>
+        <param name="copy_number_bam" type="boolean" checked="false" truevalue="-a" falsevalue=""
+               label="Compute copy number and support reads per library rather than per bam (Default = No)"/>
+        <param name="allele_freq" type="boolean" checked="false" truevalue="-h" falsevalue=""
+               label="Print out Allele Frequencing column (Default= No)"/>
+        <param name="output_score_filter" type="integer" value="30" label="Output Score filter"/>
+    </inputs>
+    <outputs>
+        <data name="results_bed" type="data" format="bed" help="BED file containing SVs and supporting reads" label="${sample_name}.bed"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="X_Hum1.bwa.bam" ftype="bam"/>
+            <param name="mean" value="227"/>
+            <param name="std_dev" value="98"/>
+            <param name="read_length" value="125"/>
+            <param name="sample_name" value="X_HUM1"/>
+            <param name="output_config_file" value="config_X_HUM1" ftype="txt"/>
+            <param name="chromosome" value="ALL"/>
+            <param name="min_length" value="7"/>
+            <param name="cutoff" value="3"/>
+            <param name="maximum_sv" value="1000000000"/>
+            <param name="quality" value="35"/>
+            <param name="min_rp" value="2"/>
+            <param name="hap_seq_threshold" value="1000"/>
+            <param name="buffer_size" value="100"/>
+            <param name="transchr_rearr" value=""/>
+            <param name="prefix" value=""/>
+            <param name="illumina_long" value=""/>
+            <param name="copy_number_bam" value=""/>
+            <param name="allele_freq" value=""/>
+            <param name="output_score_filter" value="40"/>
+            <output name="results_bed" file="X_HUM1" ftype="bed"/>
+        </test>
+    </tests>
+    <help> <![CDATA[
+BreakDancer (previously BreakDancerMax) provides genome-wide detection of five types of structural variants: insertions, deletions, inversions, inter- and intra-chromosomal translocations from next-generation short paired-end sequencing reads using read pairs that are mapped with unexpected separation distances or orientation.
+
+The following inputs are required:
+----------------------------------
+
+- One or more BAM alignment files produced by a front-end aligner such as MAQ, BWA, NovoAlign or Bfast. Listing multiple alignment files enables pooled analysis. For individual analysis, run alignment files through Breakdancer individually.
+- Mean Insert Size for each alignment file
+- The standard deviation for each alignment file
+- The Average Read length for each alignment file
+- The sample name for each alignment file
+- Name of BED output file containg SVs and supporting reads
+
+The following parameters can be set:
+------------------------------------
+
+- Which chromosome to operate on (chromosome name must match one used in alignment file.
+- The minimal required size of a SV anchoring region from which the anomalously mapped reads are found. (Default = 7). This parameter has some small effects on the SV detection accuracy.  Increasing minimal required size improves the specificity but also reduces the sensitivity.
+- Cutoff in unit of standard deviation. (Default = 3). Therefore, the upper and the lower separation threshold would be: mean + 3 std and mean - 3 std respectively. It is useful to explicitly specify the upper and the lower separation thresholds when the insert size distribution is not symmetric to the mean.
+- Maximum SV size. (Default = 1000000000)
+- Minimum MAQ mapping quality threshold. Can be used to skip reads that are not confidently mapped. (Default = 35)
+- Minimum number of read pairs required to establish a connection. (Default = 2)
+- Maximum threshold of haploid sequence coverage for regions to be ignored. (Default = 1000)
+- Buffer size for building connection. The -b parameter specifies the number of anomalous regions resides in the RAM before SV hypotheses begin to form among these regions. For dataset that is exceptionally large, it may be helpful to reduce it to cut the resident RAM usage. (Default = 100)
+- Only detect transchromosomal rearrangement. (Default = off)
+- Prefix of fastq files to which SV supporting reads will be saved to, by library
+- Analyze Illumina long insert (mate-pair) library (Default = off)
+- Compute copy number by bam file rather than by library (Default = on)
+- Print out Allele Frequencing column (Default = off)
+- Output Score filter (Default = 40)
+
+Output files
+------------
+BreakDancer output is a BED file containing SVs and supporting reads. It has the following columns:
+1. Chromosome 1
+2. Position 1
+3. Orientation 1
+4. Chromosome 2
+5. Position 2
+6. Orientation 2
+7. Type of a SV
+8. Size of a SV
+9. Confidence Score
+10. Total number of supporting read pairs
+11. Total number of supporting read pairs from each map file
+12. Estimated allele frequency
+13. Software version
+14. The run parameters
+
+Columns 1-3 and 4-6 are used to specify the coordinates of the two SV breakpoints. The orientation is a string that records the number of reads mapped to the plus (+) or the minus (-) strand in the anchoring regions.
+
+Column 7 is the type of SV detected: DEL (deletions), INS (insertion), INV (inversion), ITX (intra-chromosomal translocation), CTX (inter-chromosomal translocation), and Unknown.
+Column 8 is the size of the SV in bp.  It is meaningless for inter-chromosomal translocations.
+Column 9 is the confidence score associated with the prediction.
+Column 11 can be used to dissect the origin of the supporting read pairs, which is useful in pooled analysis.  For example, one may want to give SVs that are supported by more than one libraries higher confidence than those detected in only one library.  It can also be used to distinguish somatic events from the germline, i.e., those detected in only the tumor libraries versus those detected in both the tumor and the normal libraries.
+Column 12 is currently a placeholder for displaying estimated allele frequency. The allele frequencies estimated in this version are not accurate and should not be trusted.
+Column 13 and 14 are information useful to reproduce the results.
+
+Example 1:
+1 10000 10+0- 2 20000 7+10- CTX -296 99 10 tB|10 1.00 BreakDancerMax-0.0.1 t1
+
+An inter-chromosomal translocation that starts from chr1:10000 and goes into chr2:20000 with 10 supporting read pairs from the library tB and a confidence score of 99.
+
+Example 2:
+1 59257 5+1- 1 60164 0+5- DEL 862 99 5 nA|2:tB|1 0.56 BreakDancerMax-0.0.1 c4
+
+A deletion between chr1:59257 and chr1:60164 connected by 5 read pairs, among which 2 in library nA and 1 in library tB support the deletion hypothesis. This deletion is detected by BreakDancerMax-0.0.1 with a separation threshold of 4 s.d.
+
+Example 3:
+1 62767 10+0- 1 63126 0+10- INS -13 36 10 NA|10 1.00 BreakDancerMini-0.0.1 q10
+
+An 13 bp insertion detected by BreakDancerMini between chr1:62767 and chr1:63126 with 10 supporting read pairs from a single library 'NA' and a confidence score of 36.
+
+Notes:
+Real SV breakpoints are expected to reside within the predicted boundaries with a margin > the read length.
+
+
+
+    ]]> </help>
+    <citations>
+        <citation type="doi">doi:10.1038/nmeth.1363</citation>
+    </citations>
+</tool>
+
