@@ -1,0 +1,46 @@
+<tool id="pindel2vcf" name="Pindel2Vcf" version="0.6.3">
+    <description>convert Pindel to VCF and index</description>
+    <requirements>
+        <requirement type="package" version="0.2.5b8">pindel</requirement>
+        <requirement type="package" version="0.2.3.48">igvtools</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:"/>
+    </stdio>
+    <command><![CDATA[
+    pindel2vcf
+    -p "$input_file"
+    -r "$reference"
+    -R "$official_reference_name"
+    -d 00000000
+    -v "$input_file".vcf &&
+    mv "$input_file".vcf "$vcf_file"
+]]></command>
+    <inputs>
+        <param name="input_file" type="data" format="txt" label="File to be converted"/>
+        <param name="reference" format="fasta" type="data" label="Reference genome in fasta format"/>
+        <param name="official_reference_name" type="text" label="Official Name for Reference Genome"/>
+    </inputs>
+    <outputs>
+        <data name="vcf_file" type="tabular" format="vcf" label="${input_file.name}.vcf"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="X_Hum1_D" ftype="txt"/>
+            <param name="reference" value="dm6.fa" ftype="fasta"/>
+            <param name="official_reference_name" value="dmel_r6.10_FB2016_02" ftype="text"/>
+            <output name="vcf_file" file="X_Hum1_D.vcf" ftype="vcf"/>
+        </test>
+    </tests>
+    <help>
+        This tool converts Pindel output files to VCF format.
+        The following inputs are required:
+        - File(s) to be converted
+        - Reference genome in fasta format
+        - Official Name for Reference genome
+        - Date the reference genome was created
+    </help>
+    <citations>
+        <citation type="doi">doi:10.1093/bioinformatics/btp394</citation>
+    </citations>
+</tool>

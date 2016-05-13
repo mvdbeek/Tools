@@ -1,0 +1,10 @@
+# .shed.yml supporting automatic pushes.
+owner: portiahollyoak
+name: pindel2vcf
+description: 
+long_description: |
+This tool converts Pindel output files to VCF format
+categories:
+  - Sequence Analysis
+homepage_url: http://artbio.fr
+remote_repository_url: https://github.com/portiahollyoak/Tools
