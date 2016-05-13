@@ -64,7 +64,7 @@
         <param name="output_score_filter" type="integer" value="30" label="Output Score filter"/>
     </inputs>
     <outputs>
-        <data name="results_bed" type="data" format="bed" help="BED file containing SVs and supporting reads" label="${sample_name}.bed"/>
+        <data name="results_bed" type="data" format="bed" help="BED file containing SVs and supporting reads" label="${sample_name}"/>
     </outputs>
     <tests>
         <test>
