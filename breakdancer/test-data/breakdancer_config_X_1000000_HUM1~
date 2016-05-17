@@ -1,0 +1,1 @@
+map:../HUM_BAM_dm6fasta/Hum1.bwa.bam	mean:227	std:98	readlen:125	sample:HUM1	exe:samtools view
