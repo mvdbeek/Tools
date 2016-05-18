@@ -26,10 +26,10 @@
     </outputs>
     <tests>
         <test>
-            <param name="input_file" value="X_Hum1_D" ftype="txt"/>
+            <param name="input_file" value="X_100000_Hum1.bam_Deletions" ftype="txt"/>
             <param name="reference" value="dm6.fa" ftype="fasta"/>
             <param name="official_reference_name" value="dmel_r6.10_FB2016_02" ftype="text"/>
-            <output name="vcf_file" file="X_Hum1_D.vcf" ftype="vcf"/>
+            <output name="vcf_file" file="X_100000_Hum1.bam_Deletions.vcf" ftype="vcf"/>
         </test>
     </tests>
     <help>
