@@ -1,0 +1,11 @@
+This folder contains test data for the pindel galaxy tool.
+
+X_100000_Hum1.bam = The first 100,000 nucleotides of the X chromosome of the 'Hum' sample sequence in bam format.
+X_1000000_dm6.fasta = The first 1,000,0000 nucleotides of X chromosome of Drosophila Melanogaster genome release 6 (dm6) in fasta format.
+
+Information:
+The readlength for the test data alignment file is 250
+
+Other required files:
+Drosophila Melanogaster release 6.10 reference genome in fasta format
+
