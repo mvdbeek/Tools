@@ -1,6 +1,0 @@
-This is a collection of test data to be used with breakdancer. It consists of:
-
-an alignment file
-a manual configuration file (variables to be put into galaxy e.g. mean, standard deviation)
-a output bed file
-
