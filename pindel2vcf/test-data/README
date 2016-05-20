@@ -1,3 +1,7 @@
 This folder contains test-data for the tool pindel2vcf.
 
+X_100000_Hum1.bam_Deletions.txt is the Pindel Deletions output file for the sample X_100000_Hum1.
+X_100000_Hum1.bam_Deletions.txt.vcf is the converted VCF output
+dm6_X.fasta is the Drosophila Melanogaster reference genome release 6.10 chromosome X sequence in fasta format.
+
 Official reference name: dmel_r6.10_FB2016_02
