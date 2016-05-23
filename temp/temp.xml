@@ -35,9 +35,9 @@
         <param name="minimum_score_difference" type="integer" min="10" max="37" value="30" label="Minimum score difference between optimal and suboptimal alignment to consider read uniquely mapped"></param>
     </inputs>
     <outputs>
-        <data format="bed" type="data" name="insertion_summary" label="Insertion summary file" />
-        <data format="bed" type="data" name="absence_summary" label="Absence summary file" />
-        <data format="zip" type="data" name="archive" label="Compressed output files" />
+        <data format="bed" type="data" name="insertion_summary" label="${alignment.element_identifier} Insertion summary file" />
+        <data format="bed" type="data" name="absence_summary" label="${alignment.element_identifier} Absence summary file" />
+        <data format="zip" type="data" name="archive" label="${alignment.element_identifier} Compressed output files" />
     </outputs>
     <tests>
         <test>
