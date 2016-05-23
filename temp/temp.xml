@@ -1,4 +1,4 @@
-<tool id ="run_TEMP" name="TEMP" version=" 0.1.6">
+<tool id ="run_TEMP" name="TEMP" version=" 0.1.7">
     <description></description>
     <requirements>
         <!-- The following are classical toolshed packages and should be removed
@@ -19,8 +19,23 @@
     <command><![CDATA[
         ln -f -s "$alignment.metadata.bam_index" alignment.sorted.bam.bai &&
         ln -f -s "$alignment" alignment.sorted.bam &&
-        bash $__tool_directory__/scripts/TEMP_Insertion.sh -x "$minimum_score_difference" -i alignment.sorted.bam -s $__tool_directory__/scripts -r "$consensus_te_seqs" -t "$te_locations" -m "$mismatches" -f "$median_insertsize" -c \${GALAXY_SLOTS:-2} &&
-        bash $__tool_directory__/scripts/TEMP_Absence.sh -x "$minimum_score_difference" -i alignment.sorted.bam -s $__tool_directory__/scripts -r "$te_locations" -t "$reference2bit" -f 500 -c \${GALAXY_SLOTS:-2} &&
+        bash $__tool_directory__/scripts/TEMP_Insertion.sh
+        -x "$minimum_score_difference"
+        -i alignment.sorted.bam
+        -s $__tool_directory__/scripts
+        -r "$consensus_te_seqs"
+        -t "$te_locations"
+        -m "$mismatches"
+        -f "$median_insertsize"
+        -c \${GALAXY_SLOTS:-2} &&
+        bash $__tool_directory__/scripts/TEMP_Absence.sh
+        -x "$minimum_score_difference"
+        -i alignment.sorted.bam
+        -s $__tool_directory__/scripts
+        -r "$te_locations"
+        -t "$reference2bit"
+        -f "$median_insertsize"
+        -c \${GALAXY_SLOTS:-2} &&
         zip archive.zip  *insertion* *excision* *absence* && mv archive.zip $archive &&
         mv alignment.insertion.refined.bp.summary $insertion_summary &&
         mv alignment.absence.refined.bp.summary $absence_summary
@@ -30,9 +45,9 @@
         <param format="twobit" name="reference2bit" type="data" label="Reference twobit file"/>
         <param format="fasta" name="consensus_te_seqs" type="data" label="Consensus TE Seqs fasta file"/>
         <param format="bed" name="te_locations" type="data" label="TE Locations bed file"/>
-        <param name="median_insertsize" type="integer" label="Median Insert Length"/>
+        <param name="median_insertsize" value="" type="integer" label="Median Insert Length"/>
         <param name="mismatches" min="0" max="5" type="integer" value="3" label="Allow this many mismatches when aligning to TEs"/>
-        <param name="minimum_score_difference" type="integer" min="10" max="37" value="30" label="Minimum score difference between optimal and suboptimal alignment to consider read uniquely mapped"></param>
+        <param name="minimum_score_difference" type="integer" min="10" max="37" value="30" label="Minimum score difference between optimal and suboptimal alignment to consider read uniquely mapped"/>
     </inputs>
     <outputs>
         <data format="bed" type="data" name="insertion_summary" label="${alignment.element_identifier} Insertion summary file" />
@@ -45,7 +60,7 @@
             <param name="reference2bit" value="dm6_chr2l.twobit" ftype="twobit"/>
             <param name="consensus_te_seqs" value="test_consensus.fa" ftype="fasta"/>
             <param name="te_locations" value="test_TE_annotation.gff3" ftype="bed"/>
-            <param name="median_insertsize" value="500"/>
+            <param name="median_insertsize" value="500" ftype="integer"/>
             <output name="insertion_summary" file="test_chromosome.insertion.refined.bp.summary" ftype="bed"/>
             <output name="absence_summary" file="test_chromosome.absence.refined.bp.summary" ftype="bed"/>
         </test>
@@ -53,14 +68,14 @@
     <help> <![CDATA[
 
 
+TEMP
+-------------
 TEMP is a software package for detecting transposable elements (TEs)  insertions and absences from pooled high-throughput sequencing data
 
 Current version v1.04
 
 Author: Jiali Zhuang (jiali.zhuang@umassmed.edu) and Jie Wang (jie.wangj@umassmed.edu) Weng Lab, University of Massachusetts Medical School, Worcester, MA, USA
 
-For TE insertion analysis run TEMP_Insertion.sh in script.
-For TE absence analysis run TEMP_Absence.sh in script.
 
 Output files
 -------------
