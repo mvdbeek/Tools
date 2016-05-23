@@ -65,7 +65,7 @@
     </inputs>
     <outputs>
         <data name="results_bed" type="data" format="bed" label="${sample_name} Breakdancer BED file containing SVs and supporting reads "/>
-        <data name="results_stdout" type="data" format="bed" label="${sample_name} Breakdancer summary"/>
+        <data name="breakdancer_stdout" type="data" format="bed" label="${sample_name} Breakdancer summary"/>
     </outputs>
     <tests>
         <test>
