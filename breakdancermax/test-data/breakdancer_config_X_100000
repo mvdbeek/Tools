@@ -1,1 +1,1 @@
-map:../HUM_BAM_dm6fasta/Hum1.bwa.bam	mean:227	std:98	readlen:125	sample:HUM1	exe:samtools view
+map:X_10000000_Hum1.bam	mean:227	std:98	readlen:125	sample:X_10000000_Hum1	exe:samtools view
