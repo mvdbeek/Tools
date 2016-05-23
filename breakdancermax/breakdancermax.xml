@@ -33,7 +33,7 @@
         $copy_number_bam
         $allele_freq
         -y "$output_score_filter"
-         output_config_file &&
+         output_config_file > "$breakdancer_stdout" &&
         mv "$sample_name" "$results_bed"
     ]]></command>
     <inputs>
@@ -64,7 +64,8 @@
         <param name="output_score_filter" type="integer" value="30" label="Output Score filter"/>
     </inputs>
     <outputs>
-        <data name="results_bed" type="data" format="bed" help="BED file containing SVs and supporting reads" label="${sample_name}"/>
+        <data name="results_bed" type="data" format="bed" label="${sample_name} Breakdancer BED file containing SVs and supporting reads "/>
+        <data name="results_stdout" type="data" format="bed" label="${sample_name} Breakdancer summary"/>
     </outputs>
     <tests>
         <test>
