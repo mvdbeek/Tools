@@ -1,4 +1,4 @@
-<tool id ="run_TEMP" name="TEMP" version=" 0.1.5">
+<tool id ="run_TEMP" name="TEMP" version=" 0.1.6">
     <description></description>
     <requirements>
         <!-- The following are classical toolshed packages and should be removed
@@ -30,7 +30,7 @@
         <param format="twobit" name="reference2bit" type="data" label="Reference twobit file"/>
         <param format="fasta" name="consensus_te_seqs" type="data" label="Consensus TE Seqs fasta file"/>
         <param format="bed" name="te_locations" type="data" label="TE Locations bed file"/>
-        <param format="txt" name="median_insertsize" type="data" label="Median Insert Length"/>
+        <param name="median_insertsize" type="integer" label="Median Insert Length"/>
         <param name="mismatches" min="0" max="5" type="integer" value="3" label="Allow this many mismatches when aligning to TEs"/>
         <param name="minimum_score_difference" type="integer" min="10" max="37" value="30" label="Minimum score difference between optimal and suboptimal alignment to consider read uniquely mapped"></param>
     </inputs>
@@ -45,7 +45,7 @@
             <param name="reference2bit" value="dm6_chr2l.twobit" ftype="twobit"/>
             <param name="consensus_te_seqs" value="test_consensus.fa" ftype="fasta"/>
             <param name="te_locations" value="test_TE_annotation.gff3" ftype="bed"/>
-            <param name="median_insertsize" value="median_insert_size" ftype="txt"/>
+            <param name="median_insertsize" value="500"/>
             <output name="insertion_summary" file="test_chromosome.insertion.refined.bp.summary" ftype="bed"/>
             <output name="absence_summary" file="test_chromosome.absence.refined.bp.summary" ftype="bed"/>
         </test>
