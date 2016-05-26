@@ -19,5 +19,5 @@ with open(args.output, "w") as output:
         for line in input_file_handle:
             columns = line.strip().split("\t")
             if columns[2] in dictionary:
-                columns[8] = columns[8] + "Colour={colour}\n".format(colour = dictionary[columns[2]])
+                columns[8] = columns[8] + "Colour={colour};\n".format(colour = dictionary[columns[2]])
             output.write("\t".join(columns))
