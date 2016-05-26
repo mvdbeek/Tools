@@ -1,4 +1,4 @@
-<tool id="gff_colour_maker" name="Add Feature Colours" version="0.1.0">
+<tool id="gff_feature_colours" name="Add Feature Colours to GFF" version="0.1.0">
     <requirements>
     </requirements>
     <stdio>
@@ -34,19 +34,20 @@
         <data format="input" name="output" label="Add feature colours to ${input.element_identifier}" />
     </outputs>
     <help><![CDATA[
-This tool will allow the user to assign a colour to unique features found in the 3rd column of a GFF file for visualisation in IGV.
+Description
+------------
 
-This tool works by allowing the user to match unique features to a colour and then it will add the assigned colour of that feature to the 9th column of the feature line. This will then be interpreted in IGV, and the feature will appear in its assigned colour.
+The Add Feature Colours tool allows the user to assign a colour to unique features found in the 3rd column of a GFF file for visualisation in a genome browser. It works by allowing the user to match unique features to a colour and then it will add the assigned colour of that feature to the 9th column of the feature line. This will then be interpreted by the genome browser, and the feature will appear in its assigned colour.
 
-For example:
--------------
-Input GFF file:
-211000022278978	DHGP	Bari1	515	2242	.	+	.	ID=RR41606_transposable_element;
+Example
+----------------
+Input:
 
-Feature: Bari1
-Assigned colour: #ff00ff
+211000022278978	DHGP    Bari1    515    2242    .    +    .     ID=RR41606_transposable_element;
+
 
 Output:
-211000022278978	DHGP	Bari1	515	2242	.	+	.	ID=RR41606_transposable_element;Colour=#ff00ff;
+
+211000022278978	DHGP    Bari1    515    2242    .    +    .     ID=RR41606_transposable_element;Colour=#ff00ff;
     ]]></help>
 </tool>
