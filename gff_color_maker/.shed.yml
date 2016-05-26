@@ -1,0 +1,11 @@
+# .shed.yml supporting automatic pushes.
+owner: portiahollyoak
+name: gff_colour_maker
+description: Adds assigned feature colours
+long_description: |
+  Takes unique features in 3rd column of GFF file, allows user to assign a colour to each and then adds colour to 9th column for visualisation.
+
+categories:
+  - Text Manipulation
+homepage_url: http://artbio.fr
+remote_repository_url: https://github.com/portiahollyoak/Tools

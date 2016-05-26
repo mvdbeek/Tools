@@ -1,0 +1,52 @@
+<tool id="gff_colour_maker" name="Add Feature Colours" version="0.1.0">
+    <requirements>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+        python "$__tool_directory__"/add_colour.py
+        --input $input
+        --features
+        #for feature in $feat
+            "${feature.feature}"
+        #end for
+        --colours
+        #for feature in $feat
+            "${feature.feature_colour.value}"
+        #end for
+        --output $output
+    ]]></command>
+    <inputs>
+        <param name="input" type="data" format="gff,gtf" label="Dataset"/>
+        <repeat name="feat" title="Feature to assign a colour">
+            <param name="feature" type="select">
+                <options from_dataset="input">
+                    <column name="name" index="2"/>
+                    <column name="value" index="2"/>
+                    <filter type="unique_value" ref="input" column="2" />
+                </options>
+            </param>
+            <param name="feature_colour" type="colour" label="Feature Colour" value="#ff00ff"/>
+        </repeat>
+    </inputs>
+    <outputs>
+        <data format="input" name="output" label="Add feature colours to ${input_file.element_identifier}" />
+    </outputs>
+    <help><![CDATA[
+This tool will allow the user to assign a colour to unique features found in the 3rd column of a GFF file for visualisation in IGV.
+
+This tool works by allowing the user to match unique features to a colour and then it will add the assigned colour of that feature to the 9th column of the feature line. This will then be interpreted in IGV, and the feature will appear in its assigned colour.
+
+For example:
+-------------
+Input GFF file:
+211000022278978	DHGP	Bari1	515	2242	.	+	.	ID=RR41606_transposable_element;
+
+Feature: Bari1
+Assigned colour: #ff00ff
+
+Output:
+211000022278978	DHGP	Bari1	515	2242	.	+	.	ID=RR41606_transposable_element;Colour=#ff00ff;
+    ]]></help>
+</tool>
