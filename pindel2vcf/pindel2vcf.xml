@@ -22,7 +22,7 @@
         <param name="official_reference_name" type="text" label="Official Name for Reference Genome"/>
     </inputs>
     <outputs>
-        <data name="vcf_file" type="tabular" format="vcf" label="${input_file.name}.vcf"/>
+        <data name="vcf_file" type="tabular" format="vcf" label="${input_file.name}"/>
     </outputs>
     <tests>
         <test>
