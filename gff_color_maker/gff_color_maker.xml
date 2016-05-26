@@ -27,11 +27,11 @@
                     <filter type="unique_value" ref="input" column="2" />
                 </options>
             </param>
-            <param name="feature_colour" type="colour" label="Feature Colour" value="#ff00ff"/>
+            <param name="feature_colour" type="color" label="Feature Colour" value="#ff00ff"/>
         </repeat>
     </inputs>
     <outputs>
-        <data format="input" name="output" label="Add feature colours to ${input_file.element_identifier}" />
+        <data format="input" name="output" label="Add feature colours to ${input.element_identifier}" />
     </outputs>
     <help><![CDATA[
 This tool will allow the user to assign a colour to unique features found in the 3rd column of a GFF file for visualisation in IGV.
