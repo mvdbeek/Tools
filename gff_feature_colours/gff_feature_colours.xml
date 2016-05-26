@@ -33,6 +33,14 @@
     <outputs>
         <data format="input" name="output" label="Add feature colours to ${input.element_identifier}" />
     </outputs>
+    <test>
+        <param name="input" value="test-gff.gff" ftype="gff"/>
+        <param name="feat_0|feature" value="Idefix" />
+        <param name="feat_0|feature_color" value="#ff0000"/>
+        <param name="feat_1|feature" value="INE-1" />
+        <param name="feat_1|feature_color" value="#00ff00"/>
+        <output name="output" value="test-gff-colours.gff" ftype="gff"/>
+    </test>
     <help><![CDATA[
 Description
 ------------
