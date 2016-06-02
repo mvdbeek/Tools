@@ -1,0 +1,12 @@
+# .shed.yml supporting automatic pushes.
+owner: portiahollyoak
+name: fastuniq 
+description: duplicate read remover
+long_description: |
+  FastUniq is an ultrafast de novo tool for removal of duplicates in paired short DNA sequence reads in FASTQ format.
+  It identifies duplicates by comparing sequences between read pairs and does not require complete genome sequences as prerequisites.
+  It is also capable of simultaneously handling reads with different lengths and results in highly efficient running time.
+categories:
+  - Fastq Manipulation
+homepage_url: http://artbio.fr
+remote_repository_url: https://github.com/portiahollyoak/Tools
