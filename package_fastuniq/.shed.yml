@@ -1,0 +1,19 @@
+# .shed.yml supporting automatic pushes.
+owner: portiahollyoak
+name: package_fastuniq_1_1
+description: an ultrafast de novo duplicates removal tool for paired short DNA sequences
+long_description: |
+  The presence of duplicates introduced by PCR amplification is a major issue
+  in paired short reads from next-generation sequencing platforms. These
+  duplicates might have a serious impact on research applications, such as
+  scaffolding in whole-genome sequencing and discovering large-scale genome
+  variations, and are usually removed. We present FastUniq as a fast de novo tool
+  for removal of duplicates in paired short reads. FastUniq identifies duplicates
+  by comparing sequences between read pairs and does not require complete genome
+  sequences as prerequisites. FastUniq is capable of simultaneously handling
+  reads with different lengths and results in highly efficient running time,
+  which increases linearly at an average speed of 87 million reads per 10 minutes.
+categories:
+  - Fastq Manipulation 
+homepage_url: http://artbio.fr 
+remote_repository_url: https://github.com/portiahollyoak/Tools
