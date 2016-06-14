@@ -1,4 +1,4 @@
-<tool id ="run_TEMP" name="TEMP" version="0.1.7">
+<tool id ="run_TEMP" name="TEMP" version="0.1.8">
     <description></description>
     <requirements>
         <!-- The following are classical toolshed packages and should be removed
@@ -50,8 +50,8 @@
         <param name="minimum_score_difference" type="integer" min="10" max="37" value="30" label="Minimum score difference between optimal and suboptimal alignment to consider read uniquely mapped"/>
     </inputs>
     <outputs>
-        <data format="bed" type="data" name="insertion_summary" label="${alignment.element_identifier} Insertion summary file" />
-        <data format="bed" type="data" name="absence_summary" label="${alignment.element_identifier} Absence summary file" />
+        <data format="bed" type="data" name="insertion_summary" label="${alignment.element_identifier} Insertions" />
+        <data format="bed" type="data" name="absence_summary" label="${alignment.element_identifier} Absences" />
         <data format="zip" type="data" name="archive" label="${alignment.element_identifier} Compressed output files" />
     </outputs>
     <tests>
