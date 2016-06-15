@@ -1,4 +1,4 @@
-<tool id ="run_TEMP" name="TEMP" version="0.1.8">
+<tool id ="run_TEMP" name="TEMP" version="0.1.9">
     <description></description>
     <requirements>
         <!-- The following are classical toolshed packages and should be removed
@@ -25,6 +25,7 @@
         -s $__tool_directory__/scripts
         -r "$consensus_te_seqs"
         -t "$te_locations"
+        -u "$te_families"
         -m "$mismatches"
         -f "$median_insertsize"
         -c \${GALAXY_SLOTS:-2} &&
@@ -45,6 +46,7 @@
         <param format="twobit" name="reference2bit" type="data" label="Reference twobit file"/>
         <param format="fasta" name="consensus_te_seqs" type="data" label="Consensus TE Seqs fasta file"/>
         <param format="bed" name="te_locations" type="data" label="TE Locations bed file"/>
+        <param format="tabular" name="te_families" type="data" label="TE Annotations' Families" help="Families of transposable elements in tab delimited format (with the first column the name of the elemenet and the second column family)."/>
         <param name="median_insertsize" value="" type="integer" label="Median Insert Length"/>
         <param name="mismatches" min="0" max="5" type="integer" value="3" label="Allow this many mismatches when aligning to TEs"/>
         <param name="minimum_score_difference" type="integer" min="10" max="37" value="30" label="Minimum score difference between optimal and suboptimal alignment to consider read uniquely mapped"/>
