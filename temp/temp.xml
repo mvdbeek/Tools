@@ -1,4 +1,4 @@
-<tool id ="run_TEMP" name="TEMP" version="0.2.0">
+<tool id ="run_TEMP" name="TEMP" version="0.2.1">
     <description></description>
     <requirements>
         <!-- The following are classical toolshed packages and should be removed
@@ -39,9 +39,9 @@
         -t "$reference2bit"
         -f "$median_insertsize"
         -c \${GALAXY_SLOTS:-2} &&
-        zip archive.zip  *insertion* *excision* *absence* && mv archive.zip $archive &&
         mv alignment.insertion.refined.bp.summary $insertion_summary &&
-        mv alignment.absence.refined.bp.summary $absence_summary
+        mv alignment.absence.refined.bp.summary $absence_summary &&
+        tar -czf archive.tar.gz  *insertion* *excision* *absence* && mv archive.tar.gz $archive
     ]]></command>
     <inputs>
         <param format="bam" name="alignment" type="data" label="Alignment bam file"/>
@@ -56,7 +56,7 @@
     <outputs>
         <data format="bed" type="data" name="insertion_summary" label="${alignment.element_identifier} Insertions" />
         <data format="bed" type="data" name="absence_summary" label="${alignment.element_identifier} Absences" />
-        <data format="zip" type="data" name="archive" label="${alignment.element_identifier} Compressed output files" />
+        <data format="tar" type="data" name="archive" label="${alignment.element_identifier} Compressed output files" />
     </outputs>
     <tests>
         <test>
