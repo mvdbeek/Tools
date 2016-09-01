@@ -1,4 +1,4 @@
-<tool id ="run_TEMP" name="TEMP" version="0.2.1">
+<tool id ="run_TEMP" name="TEMP" version="0.2.2">
     <description></description>
     <requirements>
         <!-- The following are classical toolshed packages and should be removed
@@ -41,7 +41,7 @@
         -c \${GALAXY_SLOTS:-2} &&
         mv alignment.insertion.refined.bp.summary $insertion_summary &&
         mv alignment.absence.refined.bp.summary $absence_summary &&
-        tar -czf archive.tar.gz  *insertion* *excision* *absence* && mv archive.tar.gz $archive
+        tar -czf archive.tar.gz  *insertion* *excision* && mv archive.tar.gz $archive
     ]]></command>
     <inputs>
         <param format="bam" name="alignment" type="data" label="Alignment bam file"/>
