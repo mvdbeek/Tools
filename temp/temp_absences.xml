@@ -1,0 +1,103 @@
+<tool id ="TEMP_absence" name="TEMP Excision" version="0.2.2.0">
+    <description>finds TEs that have excised relative to the reference</description>
+    <requirements>
+        <requirement type="package" version="1.6.924=pl5.22.0_0">perl-bioperl</requirement>
+        <requirement type="package" version="0.7.13">bwa</requirement>
+        <requirement type="package" version="2.25.0">bedtools</requirement>
+        <requirement type="package" version="324">ucsc-twobittofa</requirement>
+        <requirement type="package" version="1.3.1">samtools</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+        ln -f -s "$alignment.metadata.bam_index" alignment.sorted.bam.bai &&
+        ln -f -s "$alignment" alignment.sorted.bam &&
+        bash $__tool_directory__/scripts/TEMP_Absence.sh
+        -x "$minimum_score_difference"
+        -i alignment.sorted.bam
+        -s $__tool_directory__/scripts
+        -r "$te_locations"
+        -t "$reference2bit"
+        -f "$median_insertsize"
+        -c \${GALAXY_SLOTS:-2} &&
+        mv alignment.absence.refined.bp.summary $absence_summary
+    ]]></command>
+    <inputs>
+        <param format="bam" name="alignment" type="data" label="Alignment bam file"/>
+        <param format="twobit" name="reference2bit" type="data" label="Reference twobit file"/>
+        <param format="bed" name="te_locations" type="data" label="TE Annotations bed file"/>
+        <param name="median_insertsize" value="" type="integer" label="Median Insert Length"/>
+        <param name="minimum_score_difference" type="integer" min="10" max="37" value="30" label="Minimum difference between mapping scores"/>
+    </inputs>
+    <outputs>
+        <data format="bed" type="data" name="absence_summary" label="${alignment.element_identifier} Absences" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="alignment" value="test_chromosome.sorted.bam" ftype="bam"/>
+            <param name="reference2bit" value="dm3_chr2L.2bit" ftype="twobit"/>
+            <param name="te_locations" value="test_TE_annotation.bed" ftype="bed"/>
+            <param name="median_insertsize" value="500" ftype="integer"/>
+            <output name="absence_summary" file="test_absence_out.bed" ftype="bed"/>
+        </test>
+    </tests>
+    <help> <![CDATA[
+
+
+TEMP
+-------------
+TEMP is a software package for detecting transposable elements (TEs)  insertions and absences from pooled high-throughput sequencing data
+
+Current version v1.04
+
+Author: Jiali Zhuang (jiali.zhuang@umassmed.edu) and Jie Wang (jie.wangj@umassmed.edu) Weng Lab, University of Massachusetts Medical School, Worcester, MA, USA
+
+*Input files/variables*
+-------------------------
+* Alignment file in BAM format
+* Reference genome used in aligning, in fasta or twobit format.
+* Transposable Elements' Consensus Sequences in fasta format.
+* Annotations of TEs in reference genome in bed format.
+* TE Identifiers and Families (optional) - A file containing in the first column the TE names/identifiers from the consensus sequences file, and in the second column, their respective TE family names as in the TE annotations file. When supplied, if a detected insertion overlaps with an annotated TE of the same family, the detected insertion will be excluded from the results.
+* Median Insert Length
+* Number of Mismatches allowed (default 3)
+* Minimum difference between mapping scores. The minimum difference in scores between the optimal and suboptimal alignments to consider a read uniquely mapped.
+
+*Output files*
+-----------------
+* **In the Insertions output file there are 14 columns:**
+* Column 1: The chromosome where the detected insertion happens.
+* Column 2: The coordinate of the start position of the detected insertion.
+* Column 3: The coordinate of the end position of the detected insertion.
+* Column 4: The TE family that the detected insertion belongs to.
+* Column 5: The direction of the insertion. “Plus” means that the TE is integrated with the plus strand of the genome while “minus” means the TE is integrated with the minus strand.
+* Column 6: The class of the insertion. “1p1” means that the detected insertion is supported by reads at both sides. “2p” means the detected insertion is supported by more than 1 read at only 1 side. “Singleton” means the detected insertion is supported by only 1 read at 1 side.
+* Column 7: The total number of read pairs that support the detected insertion.
+* Column 8: The estimated population frequency of the detected insertion.
+* Columns 9 & 10: The coordinate of a junction and the number of the reads supporting it. If the junction is not found column 9 will be the arithmetic mean of the start and end coordinates and column 10 will have the value 0.
+* Columns 11 & 12: Same as Columns 9 & 10 except for the junction on the other strand.
+* Column 13: The number of reads supporting the detected insertion at the 5’ end of the TE (not including junction spanning reads).
+* Column 13: The number of reads supporting the detected insertion at the 3’ end of the TE (not including junction spanning reads).
+
+
+-----
+
+
+* **In the Absences output file there are 14 columns:**
+* Column 1: The chromosome where the detected absence happens.
+* Column 2: The coordinate of the start position of the detected absence.
+* Column 3: The coordinate of the end position of the detected absence.
+* Column 4: The TE family that the detected insertion belongs to.
+* Column 5: Junctions at 5’ of the excised TE. The two numbers are the coordinates of the junctions on the two strands.
+* Column 6: Junctions at 3’ of the excised TE. The two numbers are the coordinates of the junctions on the two strands.
+* Column 7: The number of reads supporting the absence.
+* Column 8: The number of reads supporting the reference (no absence).
+* Column 9: Estimated population frequency of the detected absence event.
+
+
+    ]]> </help>
+    <citations>
+        <citation type="doi">10.1093/nar/gku323</citation>
+    </citations>
+</tool>

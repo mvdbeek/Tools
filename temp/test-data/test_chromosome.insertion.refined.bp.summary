@@ -1,8 +1,0 @@
-Chr	Start	End	TransposonName	TransposonDirection	Class	VariantSupport	Frequency	Junction1	Junction1Support	Junction2	Junction2Support	5'_Support	3'_Support
-chr2L	8900590	8900703	FBgn0000481_Doc	antisense	1p1	8	0.1667	8900646	0	8900646	0	5	3
-chr2L	8907814	8908314	FBgn0000155_roo	antisense	singleton	1	0.0179	8908064	0	8908064	0	0	1
-chr2L	8927841	8928341	FBgn0004141_HeT-A	sense	singleton	1	0.0333	8928091	0	8928091	0	0	1
-chr2L	8959585	8960085	FBgn0000481_Doc	sense	2p	3	0.0236	8959835	0	8959835	0	0	3
-chr2L	8988151	8988651	FBgn0000155_roo	antisense	singleton	1	0.0159	8988401	0	8988401	0	1	0
-chr2L	8989135	8989635	FBgn0004141_HeT-A	antisense	singleton	0.5	0.0182	8989385	0	8989385	0	0	0.5
-chr2L	8989135	8989635	FBgn0000481_Doc	antisense	singleton	0.5	0.0182	8989385	0	8989385	0	0	0.5
