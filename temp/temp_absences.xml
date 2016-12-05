@@ -1,4 +1,4 @@
-<tool id ="TEMP_absence" name="TEMP Excision" version="0.2.2.0">
+<tool id ="TEMP_absences" name="TEMP Excision" version="0.2.2.0">
     <description>finds TEs that have excised relative to the reference</description>
     <requirements>
         <requirement type="package" version="1.6.924=pl5.22.0_0">perl-bioperl</requirement>
@@ -31,7 +31,7 @@
         <param name="minimum_score_difference" type="integer" min="10" max="37" value="30" label="Minimum difference between mapping scores"/>
     </inputs>
     <outputs>
-        <data format="bed" type="data" name="absence_summary" label="${alignment.element_identifier} Absences" />
+        <data format="bed" name="absence_summary" label="${alignment.element_identifier} Absences" />
     </outputs>
     <tests>
         <test>

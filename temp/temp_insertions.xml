@@ -1,5 +1,5 @@
-<tool id ="run_TEMP" name="TEMP" version="0.2.2.0">
-    <description></description>
+<tool id ="TEMP_insertions" name="TEMP Insertion" version="0.2.2.0">
+    <description>finds TE insertions relative to reference</description>
     <requirements>
         <requirement type="package" version="1.6.924=pl5.22.0_0">perl-bioperl</requirement>
         <requirement type="package" version="0.7.13">bwa</requirement>
@@ -34,18 +34,19 @@
         <param format="tabular" name="te_families" type="data" optional="True" label="TE Identifiers and Families"/>
         <param name="median_insertsize" value="" type="integer" label="Median Insert Length"/>
         <param name="mismatches" min="0" max="5" type="integer" value="3" label="Allow this many mismatches when aligning to TEs"/>
-        <param name="minimum_score_difference" type="integer" min="10" max="37" value="30" label="Minimum difference between mapping scores"/>
+        <param name="minimum_score_difference" type="integer" min="0" max="37" value="30" label="Minimum difference between mapping scores"/>
     </inputs>
     <outputs>
-        <data format="bed" type="data" name="insertion_summary" label="${alignment.element_identifier} Insertions" />
+        <data format="bed" name="insertion_summary" label="${alignment.element_identifier} Insertions" />
     </outputs>
     <tests>
         <test>
-            <param name="alignment" value="chr2l_bwa_mem.bam" ftype="bam"/>
-            <param name="consensus_te_seqs" value="test_consensus.fa" ftype="fasta"/>
-            <param name="te_locations" value="test_TE_annotation.gff3" ftype="bed"/>
+            <param name="alignment" value="test_chromosome.sorted.bam" ftype="bam"/>
+            <param name="consensus_te_seqs" value="test_concensus.fa" ftype="fasta"/>
+            <param name="te_locations" value="test_TE_annotation.bed" ftype="bed"/>
             <param name="median_insertsize" value="500" ftype="integer"/>
-            <output name="insertion_summary" file="test_chromosome.insertion.refined.bp.summary" ftype="bed"/>
+            <param name="minimum_score_difference" value="0" ftype="integer"/>
+            <output name="insertion_summary" file="test_insertions_out.bed" ftype="bed" compare="sim_size"/>
         </test>
     </tests>
     <help> <![CDATA[
