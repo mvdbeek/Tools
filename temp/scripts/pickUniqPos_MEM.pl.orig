@@ -10,16 +10,29 @@ while(<in>)
 	chomp;
 	my @f=split/\t/,$_,12;
 	## read number 1 or 2
-	#my ($rnum)=$f[1]=~/(\d)$/;
-        my $rnum=1;
-        if (($f[1] & 128) == 128) {$rnum=2;}
+	my ($rnum)=$f[1]=~/(\d)$/;
 
 	## XT:A:* 
-	my ($xt)=$f[11]=~/XT:A:(.)/;
+        my $xt="";
+        my @a=split(/\s+/, $_);
+        my $as=0;
+        my $xs=0;
+        for my $i (11..$#a) {
+            if ($a[$i] =~ /^AS:i:/) {
+                $a[$i] =~ s/AS:i://;
+                $as=$a[$i];
+            }
+            elsif ($a[$i] =~ /^XS:i:/) {
+                $a[$i] =~ s/XS:i://;
+                $xs=$a[$i];
+            }
+            if (($xs > 0) && ($as-$xs <= $ARGV[1])) {$xt="R";}
+            elsif ($as > 0) {$xt="U";}
+        }
 
 	my $strand="+";
 	## revcomp
-	if(($f[1] & 16) == 16)
+	if($f[1]=~/r/)
         {
                 my $seq=Bio::Seq->new(-seq=>$f[9], -alphabet => 'dna');
                 $f[9]=$seq->revcom->seq;
